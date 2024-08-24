@@ -1,0 +1,70 @@
+.quiz-analysis-container {
+    /* width: 50%; */
+    margin: 50px auto;
+    text-align: center;
+  }
+  .parentComponent{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+  }
+  
+  .quiz-analysis-container h1 {
+    color: #4A90E2;
+    margin-bottom: 20px;
+  }
+  
+  .quiz-table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .quiz-table th,
+  .quiz-table td {
+    padding: 12px 15px;
+    text-align: left;
+  }
+  
+  .quiz-table thead th {
+    background-color: #4A90E2;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .quiz-table tbody tr:nth-child(even) {
+    background-color: #F7F7F7;
+  }
+  
+  .quiz-table tbody tr:nth-child(odd) {
+    background-color: #EBEBEB;
+  }
+  
+  .quiz-table td .icon1 {
+    margin: 0 5px;
+    cursor: pointer;
+    color: #854CFF;
+  }
+  .quiz-table td .icon2 {
+    margin: 0 5px;
+    cursor: pointer;
+    color: #D60000;
+  }
+  .quiz-table td .icon3 {
+    margin: 0 5px;
+    cursor: pointer;
+    color: #60B84B;
+  }
+  
+  .quiz-table td a {
+    color: #000000;
+    text-decoration: none;
+    font-weight: bold;
+    text-decoration: underline;
+  }
+  
+  .quiz-table td a:hover {
+    text-decoration: underline;
+  }
+  
