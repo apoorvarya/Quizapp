@@ -59,3 +59,130 @@
     color: white;
   }
   
+  /* ------------------------------------------------------------- */
+
+  .modal-content {
+    position: relative;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 600px;
+    margin: auto;
+  }
+  
+  .question-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .question-number-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .question-number {
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-weight: bold;
+    position: relative;
+  }
+  
+  .question-number-container.active .question-number {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .question-number-container:hover .remove-question {
+    display: block;
+  }
+  
+  .remove-question {
+    display: none;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: red;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 16px;
+  }
+  
+  .add-question {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 24px;
+    line-height: 20px;
+    cursor: pointer;
+  }
+  
+  .add-option {
+    display: block;
+    margin-top: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .option-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .remove-option {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+  
+  .remove-option img {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .timer-options {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+  }
+  
+  .timer-button {
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    margin-bottom: 5px;
+    cursor: pointer;
+  }
+  
+  .timer-button.selected {
+    background-color: red;
+    color: white;
+  }
+  
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+  
