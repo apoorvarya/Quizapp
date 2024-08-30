@@ -54,21 +54,11 @@ const getQuizByUniqueUrl = async (req, res) => {
 const getAllQuiz = async (req, res) => {
     try {
         
-        const quiz = await Quiz.findOne({ uniqueUrl });
+        const quiz = await Quiz.find();
 
         if (!quiz) {
             return res.status(404).json({ error: 'Quiz not found' });
         }
-
-        // Increment quiz impression count
-        quiz.quizImpressionCount += 1;
-
-        // Increment question impression counts
-        quiz.questions.forEach(question => {
-            question.impressionCount += 1;
-        });
-
-        await quiz.save();
 
         return res.status(200).json(quiz);
     } catch (error) {
@@ -77,6 +67,6 @@ const getAllQuiz = async (req, res) => {
 };
 
 
-export default {createQuiz, getQuizByUniqueUrl}
+export default {createQuiz, getQuizByUniqueUrl, getAllQuiz}
 
 

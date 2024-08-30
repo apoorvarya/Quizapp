@@ -12,4 +12,7 @@ router.post('/create', quizController.createQuiz);
 
 router.get('/:uniqueUrl', quizController.getQuizByUniqueUrl);
 
+
+router.get('/', quizController.getAllQuiz);
+
 export default router;

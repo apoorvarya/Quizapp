@@ -16,3 +16,5 @@ JWT_SECRET=abc123
 2. Go to the backend folder using `cd backend` and install the packages using 'npm i`
 3. After installing all the depencies run the command `npm start` and the server will start.
 4. Now to run the frontend follow the same above path and at the end run `npm run dev`.
+
+![alt text](image.png)
