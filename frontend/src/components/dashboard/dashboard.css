@@ -93,20 +93,38 @@
   grid-template-columns: repeat(4, 1fr); /* 4 columns */
   gap: 2vh;
   word-spacing: normal;
+
 }
+.font-bold{
+  font-weight: bold;
+  color: black !important;
+  font-size: 20px;
+}
+.quiz-item .fire{
+  color: #FF5D01 !important;
+  font-weight: 550;
+  font-size: 15px;
+}
+
 
 .quiz-item {
   background-color: #f9f9f9;
+  /* background-color: #c72121; */
   padding: 15px;
   text-align: center;
   border: 1px solid #ddd;
   width: 39vh;
-  height: 13vh;
+  height: 19vh;
   
 }
 
 .quiz-item h4 {
   margin: 0 0 10px;
+  font-weight: bold;
+}
+.trending-quizzes h3{
+  font-weight: bold;
+
 }
 
 .quiz-item p {
