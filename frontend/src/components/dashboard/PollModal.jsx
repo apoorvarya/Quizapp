@@ -1,15 +1,21 @@
-import PropTypes from 'prop-types';
-import { useState } from 'react';
-import './QuizeModel.css';
+import PropTypes from "prop-types";
+import { useState } from "react";
+import "./QuizeModel.css";
 
 const PollModal = ({ show, onClose, quizType }) => {
   const [questions, setQuestions] = useState([
-    { id: 1, text: '', type: 'Text', options: [{ text: '', imageUrl: '' }], timer: 'OFF' }
+    {
+      id: 1,
+      text: "",
+      type: "Text",
+      options: [{ text: "", imageUrl: "" }],
+      timer: "OFF",
+    },
   ]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [quizCreated, setQuizCreated] = useState(false); // New state for handling quiz creation
   // eslint-disable-next-line no-unused-vars
-  const [quizLink, setQuizLink] = useState('https://example.com/quiz-link'); // Placeholder for quiz link
+  const [quizLink, setQuizLink] = useState("https://example.com/quiz-link"); // Placeholder for quiz link
 
   const handleQuestionChange = (field, value) => {
     const newQuestions = [...questions];
@@ -27,7 +33,13 @@ const PollModal = ({ show, onClose, quizType }) => {
     if (questions.length < 5) {
       setQuestions([
         ...questions,
-        { id: questions.length + 1, text: '', type: 'Text', options: [{ text: '', imageUrl: '' }], timer: 'OFF' }
+        {
+          id: questions.length + 1,
+          text: "",
+          type: "Text",
+          options: [{ text: "", imageUrl: "" }],
+          timer: "OFF",
+        },
       ]);
       setCurrentQuestionIndex(questions.length);
     }
@@ -44,7 +56,10 @@ const PollModal = ({ show, onClose, quizType }) => {
   const addOption = () => {
     const newQuestions = [...questions];
     if (newQuestions[currentQuestionIndex].options.length < 5) {
-      newQuestions[currentQuestionIndex].options.push({ text: '', imageUrl: '' });
+      newQuestions[currentQuestionIndex].options.push({
+        text: "",
+        imageUrl: "",
+      });
       setQuestions(newQuestions);
     }
   };
@@ -64,14 +79,14 @@ const PollModal = ({ show, onClose, quizType }) => {
   };
 
   const handleSubmit = () => {
-    console.log('Quiz Type:', quizType);
-    console.log('Questions:', questions);
+    console.log("Quiz Type:", quizType);
+    console.log("Questions:", questions);
     setQuizCreated(true); // Move to the link-sharing view after quiz creation
   };
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(quizLink);
-    alert('Link copied to clipboard!');
+    alert("Link copied to clipboard!");
   };
 
   if (!show) {
@@ -88,7 +103,9 @@ const PollModal = ({ show, onClose, quizType }) => {
               {questions.map((_, index) => (
                 <div
                   key={index}
-                  className={`question-number-container ${index === currentQuestionIndex ? 'active' : ''}`}
+                  className={`question-number-container ${
+                    index === currentQuestionIndex ? "active" : ""
+                  }`}
                   onMouseEnter={() => setCurrentQuestionIndex(index)}
                 >
                   <div className="question-number">
@@ -114,16 +131,20 @@ const PollModal = ({ show, onClose, quizType }) => {
                 type="text"
                 placeholder="Poll Question"
                 value={questions[currentQuestionIndex].text}
-                onChange={(e) => handleQuestionChange('text', e.target.value)}
+                onChange={(e) => handleQuestionChange("text", e.target.value)}
               />
+
               <div className="option-type">
+              <p>Quiz Type</p>
                 <label>
                   <input
                     type="radio"
                     name={`type-${currentQuestionIndex}`}
                     value="Text"
-                    checked={questions[currentQuestionIndex].type === 'Text'}
-                    onChange={(e) => handleQuestionChange('type', e.target.value)}
+                    checked={questions[currentQuestionIndex].type === "Text"}
+                    onChange={(e) =>
+                      handleQuestionChange("type", e.target.value)
+                    }
                   />
                   Text
                 </label>
@@ -132,8 +153,12 @@ const PollModal = ({ show, onClose, quizType }) => {
                     type="radio"
                     name={`type-${currentQuestionIndex}`}
                     value="Image URL"
-                    checked={questions[currentQuestionIndex].type === 'Image URL'}
-                    onChange={(e) => handleQuestionChange('type', e.target.value)}
+                    checked={
+                      questions[currentQuestionIndex].type === "Image URL"
+                    }
+                    onChange={(e) =>
+                      handleQuestionChange("type", e.target.value)
+                    }
                   />
                   Image URL
                 </label>
@@ -142,8 +167,13 @@ const PollModal = ({ show, onClose, quizType }) => {
                     type="radio"
                     name={`type-${currentQuestionIndex}`}
                     value="Text & Image URL"
-                    checked={questions[currentQuestionIndex].type === 'Text & Image URL'}
-                    onChange={(e) => handleQuestionChange('type', e.target.value)}
+                    checked={
+                      questions[currentQuestionIndex].type ===
+                      "Text & Image URL"
+                    }
+                    onChange={(e) =>
+                      handleQuestionChange("type", e.target.value)
+                    }
                   />
                   Text & Image URL
                 </label>
@@ -154,25 +184,33 @@ const PollModal = ({ show, onClose, quizType }) => {
                   <input
                     type="text"
                     placeholder={
-                      questions[currentQuestionIndex].type === 'Text' 
-                        ? 'Text' 
-                        : questions[currentQuestionIndex].type === 'Image URL' 
-                        ? 'Image URL' 
-                        : 'Text'
+                      questions[currentQuestionIndex].type === "Text"
+                        ? "Text"
+                        : questions[currentQuestionIndex].type === "Image URL"
+                        ? "Image URL"
+                        : "Text"
                     }
                     value={option.text}
-                    onChange={(e) => handleOptionChange(oIndex, 'text', e.target.value)}
+                    onChange={(e) =>
+                      handleOptionChange(oIndex, "text", e.target.value)
+                    }
                   />
-                  {questions[currentQuestionIndex].type === 'Text & Image URL' && (
+                  {questions[currentQuestionIndex].type ===
+                    "Text & Image URL" && (
                     <input
                       type="text"
                       placeholder="Image URL"
                       value={option.imageUrl}
-                      onChange={(e) => handleOptionChange(oIndex, 'imageUrl', e.target.value)}
+                      onChange={(e) =>
+                        handleOptionChange(oIndex, "imageUrl", e.target.value)
+                      }
                     />
                   )}
                   {questions[currentQuestionIndex].options.length > 2 && (
-                    <button className="remove-option" onClick={() => removeOption(oIndex)}>
+                    <button
+                      className="remove-option"
+                      onClick={() => removeOption(oIndex)}
+                    >
                       🗑️
                     </button>
                   )}
@@ -182,12 +220,17 @@ const PollModal = ({ show, onClose, quizType }) => {
                 Add option
               </button>
 
-              {quizType !== 'Poll Type' && (
+              {quizType !== "Poll Type" && (
                 <div className="timer-options">
-                  {['OFF', '5 sec', '10 sec'].map((value) => (
+                  <p>Timer</p>
+                  {["OFF", "5 sec", "10 sec"].map((value) => (
                     <button
                       key={value}
-                      className={`timer-button ${questions[currentQuestionIndex].timer === value ? 'selected' : ''}`}
+                      className={`timer-button ${
+                        questions[currentQuestionIndex].timer === value
+                          ? "selected"
+                          : ""
+                      }`}
                       onClick={() => handleTimerChange(value)}
                     >
                       {value}
@@ -204,12 +247,13 @@ const PollModal = ({ show, onClose, quizType }) => {
           </>
         ) : (
           <>
-            <h2>Congrats, your Quiz is Published!</h2>
+            <h2>Congrats, your Quiz is </h2>
+            <h2>Published!</h2>
             <input
               type="text"
-              value={quizLink}
+              value={"your link is here"}
               readOnly
-              className="quiz-link-input"
+              className="quiz-link"
             />
             <button className="share-button" onClick={handleCopyLink}>
               Share

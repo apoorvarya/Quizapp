@@ -19,6 +19,7 @@ import PrivateRoute from './components/PrivateRoute.jsx';
 import Dashboard from './components/dashboard/Dashboard.jsx';
 import AuthScreen from './screens/AuthScreen.jsx';
 import Analytics from './components/dashboard/Analytics.jsx';
+import Questionwise from './components/dashboard/Questionwise.jsx'
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<App />}>
@@ -29,7 +30,9 @@ const router = createBrowserRouter(
       <Route path='/auth' element={<AuthScreen />} />
       <Route path='/analytics' element={<Analytics />} />
       <Route path='' element={<PrivateRoute />}>
-        <Route path='/profile' element={<ProfileScreen />} />
+      <Route path='/profile' element={<ProfileScreen />} />
+      <Route path='/questionwise' element={<Questionwise />} />
+
       </Route>
     </Route>
   )
