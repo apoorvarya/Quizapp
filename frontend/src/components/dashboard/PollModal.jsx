@@ -1,21 +1,22 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
+import axios from "axios";
 import "./QuizeModel.css";
 
 const PollModal = ({ show, onClose, quizType }) => {
   const [questions, setQuestions] = useState([
     {
       id: 1,
-      text: "",
+      question: "",
       type: "Text",
       options: [{ text: "", imageUrl: "" }],
-      timer: "OFF",
+      correctOption: 0,
+      timer: 0, // Default timer to 0 (OFF)
     },
   ]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [quizCreated, setQuizCreated] = useState(false); // New state for handling quiz creation
-  // eslint-disable-next-line no-unused-vars
-  const [quizLink, setQuizLink] = useState("https://example.com/quiz-link"); // Placeholder for quiz link
+  const [quizCreated, setQuizCreated] = useState(false);
+  const [quizLink, setQuizLink] = useState("");
 
   const handleQuestionChange = (field, value) => {
     const newQuestions = [...questions];
@@ -35,10 +36,11 @@ const PollModal = ({ show, onClose, quizType }) => {
         ...questions,
         {
           id: questions.length + 1,
-          text: "",
+          question: "",
           type: "Text",
           options: [{ text: "", imageUrl: "" }],
-          timer: "OFF",
+          correctOption: 0,
+          timer: 0,
         },
       ]);
       setCurrentQuestionIndex(questions.length);
@@ -55,7 +57,7 @@ const PollModal = ({ show, onClose, quizType }) => {
 
   const addOption = () => {
     const newQuestions = [...questions];
-    if (newQuestions[currentQuestionIndex].options.length < 5) {
+    if (newQuestions[currentQuestionIndex].options.length < 4) {
       newQuestions[currentQuestionIndex].options.push({
         text: "",
         imageUrl: "",
@@ -78,10 +80,39 @@ const PollModal = ({ show, onClose, quizType }) => {
     setQuestions(newQuestions);
   };
 
-  const handleSubmit = () => {
-    console.log("Quiz Type:", quizType);
-    console.log("Questions:", questions);
-    setQuizCreated(true); // Move to the link-sharing view after quiz creation
+  const handleCorrectOptionChange = (index) => {
+    const newQuestions = [...questions];
+    newQuestions[currentQuestionIndex].correctOption = index;
+    setQuestions(newQuestions);
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const quizData = {
+        title: `Quiz ${Date.now()}`,
+        type: quizType === "Poll Type" ? "Poll" : "Q&A", // Match API's enum
+        questions: questions.map((q) => ({
+          question: q.question,
+          type: q.type,
+          options: q.options.filter(opt => opt.text.trim() !== "" || opt.imageUrl.trim() !== ""),
+          correctOption: q.correctOption,
+          timer: q.timer,
+        })),
+      };
+
+      const response = await axios.post('http://localhost:5000/api/quiz/create', quizData);
+
+      if (response.status === 201) {
+        const { uniqueUrl } = response.data;
+        setQuizLink(`http://localhost:5000/api/quiz/${uniqueUrl}`);
+        setQuizCreated(true);
+      } else {
+        alert('Failed to create quiz. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error creating quiz:', error);
+      alert('Error creating quiz. Please try again.');
+    }
   };
 
   const handleCopyLink = () => {
@@ -130,12 +161,12 @@ const PollModal = ({ show, onClose, quizType }) => {
               <input
                 type="text"
                 placeholder="Poll Question"
-                value={questions[currentQuestionIndex].text}
-                onChange={(e) => handleQuestionChange("text", e.target.value)}
+                value={questions[currentQuestionIndex].question}
+                onChange={(e) => handleQuestionChange("question", e.target.value)}
               />
 
               <div className="option-type">
-              <p>Quiz Type</p>
+                <p>Quiz Type</p>
                 <label>
                   <input
                     type="radio"
@@ -152,30 +183,30 @@ const PollModal = ({ show, onClose, quizType }) => {
                   <input
                     type="radio"
                     name={`type-${currentQuestionIndex}`}
-                    value="Image URL"
+                    value="Image"
                     checked={
-                      questions[currentQuestionIndex].type === "Image URL"
+                      questions[currentQuestionIndex].type === "Image"
                     }
                     onChange={(e) =>
                       handleQuestionChange("type", e.target.value)
                     }
                   />
-                  Image URL
+                  Image
                 </label>
                 <label>
                   <input
                     type="radio"
                     name={`type-${currentQuestionIndex}`}
-                    value="Text & Image URL"
+                    value="Text and Image"
                     checked={
                       questions[currentQuestionIndex].type ===
-                      "Text & Image URL"
+                      "Text and Image"
                     }
                     onChange={(e) =>
                       handleQuestionChange("type", e.target.value)
                     }
                   />
-                  Text & Image URL
+                  Text & Image
                 </label>
               </div>
 
@@ -186,7 +217,7 @@ const PollModal = ({ show, onClose, quizType }) => {
                     placeholder={
                       questions[currentQuestionIndex].type === "Text"
                         ? "Text"
-                        : questions[currentQuestionIndex].type === "Image URL"
+                        : questions[currentQuestionIndex].type === "Image"
                         ? "Image URL"
                         : "Text"
                     }
@@ -196,7 +227,7 @@ const PollModal = ({ show, onClose, quizType }) => {
                     }
                   />
                   {questions[currentQuestionIndex].type ===
-                    "Text & Image URL" && (
+                    "Text and Image" && (
                     <input
                       type="text"
                       placeholder="Image URL"
@@ -223,7 +254,7 @@ const PollModal = ({ show, onClose, quizType }) => {
               {quizType !== "Poll Type" && (
                 <div className="timer-options">
                   <p>Timer</p>
-                  {["OFF", "5 sec", "10 sec"].map((value) => (
+                  {[0, 5, 10].map((value) => (
                     <button
                       key={value}
                       className={`timer-button ${
@@ -233,11 +264,27 @@ const PollModal = ({ show, onClose, quizType }) => {
                       }`}
                       onClick={() => handleTimerChange(value)}
                     >
-                      {value}
+                      {value === 0 ? "OFF" : `${value} sec`}
                     </button>
                   ))}
                 </div>
               )}
+              <div className="correct-option">
+                <p>Correct Option</p>
+                {questions[currentQuestionIndex].options.map((_, index) => (
+                  <button
+                    key={index}
+                    className={`correct-option-button ${
+                      questions[currentQuestionIndex].correctOption === index
+                        ? "selected"
+                        : ""
+                    }`}
+                    onClick={() => handleCorrectOptionChange(index)}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+              </div>
             </div>
 
             <div className="modal-actions">
@@ -247,11 +294,10 @@ const PollModal = ({ show, onClose, quizType }) => {
           </>
         ) : (
           <>
-            <h2>Congrats, your Quiz is </h2>
-            <h2>Published!</h2>
+            <h2>Congrats, your Quiz is Published!</h2>
             <input
               type="text"
-              value={"your link is here"}
+              value={quizLink}
               readOnly
               className="quiz-link"
             />

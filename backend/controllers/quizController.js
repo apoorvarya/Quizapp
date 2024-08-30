@@ -5,9 +5,10 @@ const createQuiz = async (req, res) => {
     try {
         const { title, type, questions } = req.body;
 
-        if (questions.length > 5) {
-            return res.status(400).json({ error: 'A quiz can have a maximum of 5 questions.' });
-        }
+        console.log(req.body)
+        // if (questions.length > 5) {
+        //     return res.status(400).json({ error: 'A quiz can have a maximum of 5 questions.' });
+        // }
 
         // Generate a unique URL using nanoid
         const uniqueUrl = nanoid(10);
@@ -23,6 +24,7 @@ const createQuiz = async (req, res) => {
         await quiz.save();
         return res.status(201).json({ message: 'Quiz created successfully', uniqueUrl });
     } catch (error) {
+        console.log(error);
         return res.status(500).json({ error: 'Error creating quiz: ' + error.message });
     }
 };

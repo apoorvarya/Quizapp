@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 const optionSchema = new mongoose.Schema({
     text: {
         type: String,
-        required: true
+        // // required: true
     },
     imageUrl: {
         type: String,
@@ -16,12 +16,12 @@ const optionSchema = new mongoose.Schema({
 const questionSchema = new mongoose.Schema({
     question: {
         type: String,
-        required: true
+        // required: true
     },
     type: {
         type: String,
         enum: ['Text', 'Image', 'Text and Image'],
-        required: true
+        // required: true
     },
     options: {
         type: [optionSchema],
@@ -29,7 +29,7 @@ const questionSchema = new mongoose.Schema({
     },
     correctOption: {
         type: Number,
-        required: true,
+        // required: true,
         min: 0,
         max: 3
     },
@@ -52,12 +52,12 @@ function arrayLimit(val) {
 const quizSchema = new mongoose.Schema({
     title: {
         type: String,
-        required: true
+        // required: true
     },
     type: {
         type: String,
         enum: ['Q&A', 'Poll'],
-        required: true
+        // required: true
     },
     questions: {
         type: [questionSchema],
@@ -65,7 +65,7 @@ const quizSchema = new mongoose.Schema({
     },
     uniqueUrl: {
         type: String,
-        required: true,
+        // required: true,
         unique: true
     },
     quizImpressionCount: {
