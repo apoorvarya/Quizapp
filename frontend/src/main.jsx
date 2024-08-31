@@ -20,7 +20,8 @@ import Dashboard from './components/dashboard/Dashboard.jsx';
 import AuthScreen from './screens/AuthScreen.jsx';
 import Analytics from './components/dashboard/Analytics.jsx';
 import Questionwise from './components/dashboard/Questionwise.jsx'
-const router = createBrowserRouter(
+import QuizInterface from './components/quizInterface/QuizInterface.jsx';
+ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<App />}>
       <Route index={true} path='/' element={<HomeScreen />} />
@@ -31,8 +32,9 @@ const router = createBrowserRouter(
       <Route path='/analytics' element={<Analytics />} />
       <Route path='' element={<PrivateRoute />}>
       <Route path='/profile' element={<ProfileScreen />} />
-      <Route path='/questionwise' element={<Questionwise />} />
-
+      <Route path='/questionwise/:id' element={<Questionwise />} />
+      <Route path="/quiz/:id" element={<QuizInterface />} />
+ 
       </Route>
     </Route>
   )

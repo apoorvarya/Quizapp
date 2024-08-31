@@ -87,7 +87,7 @@
 }
 
 /* Modal Content */
-.modal-content {
+.modal-content1 {
   background: #ffffff;
   padding: 20px;
   border-radius: 10px;
@@ -97,7 +97,7 @@
   width: 100%;
 }
 
-.modal-content p {
+.modal-content1 p {
   font-size: 18px;
   margin-bottom: 20px;
 }

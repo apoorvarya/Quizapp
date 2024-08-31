@@ -6,14 +6,9 @@ const createQuiz = async (req, res) => {
         const { title, type, questions } = req.body;
 
         console.log(req.body)
-        // if (questions.length > 5) {
-        //     return res.status(400).json({ error: 'A quiz can have a maximum of 5 questions.' });
-        // }
-
-        // Generate a unique URL using nanoid
+         
         const uniqueUrl = nanoid(10);
-
-        // Create the quiz
+ 
         const quiz = new Quiz({
             title,
             type,
@@ -53,6 +48,22 @@ const getQuizByUniqueUrl = async (req, res) => {
         return res.status(500).json({ error: 'Error retrieving quiz: ' + error.message });
     }
 };
+const deleteQuizByUniqueUrl = async (req, res) => {
+    try {
+        const { uniqueUrl } = req.params;
+        console.log(uniqueUrl)
+        const quiz = await Quiz.findOne({ uniqueUrl });
+
+        if (!quiz) {
+            return res.status(404).json({ error: 'Quiz not found' });
+        }
+        const qd=await Quiz.deleteOne({uniqueUrl})
+
+        return res.status(200).json("quiz deleted");
+    } catch (error) {
+        return res.status(500).json({ error: 'Error retrieving quiz: ' + error.message });
+    }
+};
 const getAllQuiz = async (req, res) => {
     try {
         
@@ -69,6 +80,6 @@ const getAllQuiz = async (req, res) => {
 };
 
 
-export default {createQuiz, getQuizByUniqueUrl, getAllQuiz}
+export default {createQuiz, getQuizByUniqueUrl, getAllQuiz, deleteQuizByUniqueUrl}
 
 

@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import axios from "axios";
 import "./QuizeModel.css";
+import { FaTrashAlt } from 'react-icons/fa';
 
 const PollModal = ({ show, onClose, quizType }) => {
   const [questions, setQuestions] = useState([
@@ -9,7 +10,10 @@ const PollModal = ({ show, onClose, quizType }) => {
       id: 1,
       question: "",
       type: "Text",
-      options: [{ text: "", imageUrl: "" }],
+      options: [
+        { text: "", imageUrl: "" },
+        { text: "", imageUrl: "" },
+      ],
       correctOption: 0,
       timer: 0, // Default timer to 0 (OFF)
     },
@@ -38,7 +42,10 @@ const PollModal = ({ show, onClose, quizType }) => {
           id: questions.length + 1,
           question: "",
           type: "Text",
-          options: [{ text: "", imageUrl: "" }],
+          options: [
+            { text: "", imageUrl: "" },
+            { text: "", imageUrl: "" },
+          ],
           correctOption: 0,
           timer: 0,
         },
@@ -57,7 +64,7 @@ const PollModal = ({ show, onClose, quizType }) => {
 
   const addOption = () => {
     const newQuestions = [...questions];
-    if (newQuestions[currentQuestionIndex].options.length < 4) {
+    if (newQuestions[currentQuestionIndex].options.length < 6) {
       newQuestions[currentQuestionIndex].options.push({
         text: "",
         imageUrl: "",
@@ -69,7 +76,9 @@ const PollModal = ({ show, onClose, quizType }) => {
   const removeOption = (oIndex) => {
     const newQuestions = [...questions];
     if (newQuestions[currentQuestionIndex].options.length > 2) {
-      newQuestions[currentQuestionIndex].options.splice(oIndex, 1);
+      newQuestions[currentQuestionIndex].options = newQuestions[
+        currentQuestionIndex
+      ].options.filter((_, index) => index !== oIndex);
       setQuestions(newQuestions);
     }
   };
@@ -90,28 +99,35 @@ const PollModal = ({ show, onClose, quizType }) => {
     try {
       const quizData = {
         title: `Quiz ${Date.now()}`,
-        type: quizType === "Poll Type" ? "Poll" : "Q&A", // Match API's enum
+        type: quizType === "Poll Type" ? "Poll" : "Q&A",
         questions: questions.map((q) => ({
           question: q.question,
           type: q.type,
-          options: q.options.filter(opt => opt.text.trim() !== "" || opt.imageUrl.trim() !== ""),
+          options: q.options.filter(
+            (opt) => opt.text.trim() !== "" || opt.imageUrl.trim() !== ""
+          ),
           correctOption: q.correctOption,
           timer: q.timer,
         })),
       };
 
-      const response = await axios.post('http://localhost:5000/api/quiz/create', quizData);
+      const response = await axios.post(
+        "http://localhost:5000/api/quiz/create",
+        quizData
+      );
+      console.log(response);
+      
 
       if (response.status === 201) {
         const { uniqueUrl } = response.data;
         setQuizLink(`http://localhost:5000/api/quiz/${uniqueUrl}`);
         setQuizCreated(true);
       } else {
-        alert('Failed to create quiz. Please try again.');
+        alert("Failed to create quiz. Please try again.");
       }
     } catch (error) {
-      console.error('Error creating quiz:', error);
-      alert('Error creating quiz. Please try again.');
+      console.error("Error creating quiz:", error);
+      alert("Error creating quiz. Please try again.");
     }
   };
 
@@ -162,7 +178,9 @@ const PollModal = ({ show, onClose, quizType }) => {
                 type="text"
                 placeholder="Poll Question"
                 value={questions[currentQuestionIndex].question}
-                onChange={(e) => handleQuestionChange("question", e.target.value)}
+                onChange={(e) =>
+                  handleQuestionChange("question", e.target.value)
+                }
               />
 
               <div className="option-type">
@@ -184,9 +202,7 @@ const PollModal = ({ show, onClose, quizType }) => {
                     type="radio"
                     name={`type-${currentQuestionIndex}`}
                     value="Image"
-                    checked={
-                      questions[currentQuestionIndex].type === "Image"
-                    }
+                    checked={questions[currentQuestionIndex].type === "Image"}
                     onChange={(e) =>
                       handleQuestionChange("type", e.target.value)
                     }
@@ -199,8 +215,7 @@ const PollModal = ({ show, onClose, quizType }) => {
                     name={`type-${currentQuestionIndex}`}
                     value="Text and Image"
                     checked={
-                      questions[currentQuestionIndex].type ===
-                      "Text and Image"
+                      questions[currentQuestionIndex].type === "Text and Image"
                     }
                     onChange={(e) =>
                       handleQuestionChange("type", e.target.value)
@@ -211,7 +226,22 @@ const PollModal = ({ show, onClose, quizType }) => {
               </div>
 
               {questions[currentQuestionIndex].options.map((option, oIndex) => (
-                <div key={oIndex} className="option-section">
+                <div
+                  key={oIndex}
+                  className={`option-section ${
+                    questions[currentQuestionIndex].correctOption === oIndex
+                      ? "selected"
+                      : ""
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name={`correctOption-${currentQuestionIndex}`}
+                    checked={
+                      questions[currentQuestionIndex].correctOption === oIndex
+                    }
+                    onChange={() => handleCorrectOptionChange(oIndex)}
+                  />
                   <input
                     type="text"
                     placeholder={
@@ -226,8 +256,7 @@ const PollModal = ({ show, onClose, quizType }) => {
                       handleOptionChange(oIndex, "text", e.target.value)
                     }
                   />
-                  {questions[currentQuestionIndex].type ===
-                    "Text and Image" && (
+                  {questions[currentQuestionIndex].type === "Text and Image" && (
                     <input
                       type="text"
                       placeholder="Image URL"
@@ -237,19 +266,22 @@ const PollModal = ({ show, onClose, quizType }) => {
                       }
                     />
                   )}
-                  {questions[currentQuestionIndex].options.length > 2 && (
+                  {oIndex >= 2 && (
                     <button
                       className="remove-option"
                       onClick={() => removeOption(oIndex)}
                     >
-                      🗑️
+                       <FaTrashAlt />
                     </button>
                   )}
                 </div>
               ))}
-              <button className="add-option" onClick={addOption}>
-                Add option
-              </button>
+
+              {questions[currentQuestionIndex].options.length < 6 && (
+                <button className="add-option" onClick={addOption}>
+                  Add Option
+                </button>
+              )}
 
               {quizType !== "Poll Type" && (
                 <div className="timer-options">
@@ -269,22 +301,6 @@ const PollModal = ({ show, onClose, quizType }) => {
                   ))}
                 </div>
               )}
-              <div className="correct-option">
-                <p>Correct Option</p>
-                {questions[currentQuestionIndex].options.map((_, index) => (
-                  <button
-                    key={index}
-                    className={`correct-option-button ${
-                      questions[currentQuestionIndex].correctOption === index
-                        ? "selected"
-                        : ""
-                    }`}
-                    onClick={() => handleCorrectOptionChange(index)}
-                  >
-                    {index + 1}
-                  </button>
-                ))}
-              </div>
             </div>
 
             <div className="modal-actions">
