@@ -4,8 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLogoutMutation } from '../../slices/usersApiSlice';
 import { logout } from '../../slices/authSlice';
 import QuizModal from './QuizModal'; 
-import PollModal from './PollModal'; // Import the second modal
-
+import PollModal from './PollModal'; 
 const Sidebar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -40,8 +39,8 @@ const Sidebar = () => {
     <div className="sidebar">
       <h1>QUIZZIE</h1>
       <ul>
-        <li>Dashboard</li>
-        <li>Analytics</li>
+        <li><a href="/dashboard" className="sidebar-a">Dashboard</a></li>
+        <li><a href="/analytics" className="sidebar-a">Analytics</a></li>
         <li onClick={openQuizModal}>Create Quiz</li>
       </ul>
       <hr />

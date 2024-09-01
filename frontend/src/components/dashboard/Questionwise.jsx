@@ -1,7 +1,8 @@
-import  { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import './Questionwise.css';
+import Sidebar from './Sidebar';
 
 const QuizAnalysis = () => {
     const { id } = useParams(); // Extract the dynamic quiz ID from the URL
@@ -39,15 +40,7 @@ const QuizAnalysis = () => {
 
     return (
         <div className="quiz-analysis">
-            <div className="sidebar">
-                <h2>QUIZZIE</h2>
-                <ul>
-                    <li>Dashboard</li>
-                    <li className="active">Analytics</li>
-                    <li>Create Quiz</li>
-                </ul>
-                <button>LOGOUT</button>
-            </div>
+            <Sidebar />
             <div className="content">
                 <div className="header">
                     <h1>{quizData.title} Question Analysis</h1>
@@ -64,8 +57,13 @@ const QuizAnalysis = () => {
                         <div className="options">
                             {q.options.map((option, i) => (
                                 <div className="option" key={i}>
-                                    <span>{option.count || 0}</span>
-                                    <p>{option.text}</p>
+                                    <div className="option-text">
+                                        <span>{option.text}</span>
+                                        <span>{option.count || 0}</span>
+                                    </div>
+                                    <div className="progress-bar">
+                                        <div className="progress" style={{ width: `${(option.count || 0) * 10}%` }}></div>
+                                    </div>
                                 </div>
                             ))}
                         </div>

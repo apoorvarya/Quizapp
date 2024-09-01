@@ -1,13 +1,17 @@
-import  { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';  // Import useNavigate
 import Sidebar from './Sidebar';
-import './QuizAnalysis.css';
 import { FaTrashAlt, FaPen, FaShareAlt } from 'react-icons/fa';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import './QuizAnalysis.css';
 
 const Analytics = () => {
   const [quizzes, setQuizzes] = useState([]);
   const [deleteQuizId, setDeleteQuizId] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const navigate = useNavigate();  // Initialize useNavigate
 
   // Fetch quiz data when the component mounts
   useEffect(() => {
@@ -45,6 +49,21 @@ const Analytics = () => {
     setDeleteQuizId(null);
   };
 
+  // Handle share quiz link
+  const handleShare = (quizUrl) => {
+    const link = `${window.location.origin}/quiz/${quizUrl}`;
+    navigator.clipboard.writeText(link).then(() => {
+      toast.success('Link copied to clipboard!');
+    }).catch((error) => {
+      console.error("Failed to copy the link:", error);
+    });
+  };
+
+  // Handle Question Wise Analysis navigation
+  const handleQuestionWiseAnalysis = (quizUrl) => {
+    navigate(`/questionwise/${quizUrl}`);
+  };
+
   return (
     <>
       <div className="parentComponent">
@@ -76,10 +95,10 @@ const Analytics = () => {
                   <td>
                     <FaPen className="icon1" />
                     <FaTrashAlt className="icon2" onClick={() => openDeleteModal(quiz.uniqueUrl)} />
-                    <FaShareAlt className="icon3" />
+                    <FaShareAlt className="icon3" onClick={() => handleShare(quiz.uniqueUrl)} />
                   </td>
                   <td>
-                    <a href="#">Question Wise Analysis</a>
+                    <a href="#" onClick={() => handleQuestionWiseAnalysis(quiz.uniqueUrl)}>Question Wise Analysis</a>
                   </td>
                 </tr>
               ))}
@@ -87,8 +106,6 @@ const Analytics = () => {
           </table>
         </div>
       </div>
-
-      {/* Delete Confirmation Modal */}
       {showDeleteModal && (
         <div className="modal">
           <div className="modal-content">
@@ -100,6 +117,7 @@ const Analytics = () => {
           </div>
         </div>
       )}
+      <ToastContainer />
     </>
   );
 };
